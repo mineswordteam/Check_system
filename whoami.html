@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>شناسه دستگاه</title>
+<style>
+  body {
+    margin: 0; min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    background: #0B0E14; color: #E7EAF0;
+    font-family: -apple-system, "Segoe UI", Tahoma, sans-serif;
+    direction: rtl; padding: 24px;
+  }
+  .box { max-width: 420px; text-align: center; }
+  .id {
+    font-family: 'JetBrains Mono', monospace;
+    background: #141821; border: 1px solid #262C38;
+    padding: 14px 16px; border-radius: 10px;
+    margin-top: 16px; word-break: break-all; font-size: 14px;
+    user-select: all;
+  }
+  p { color: #8A92A3; font-size: 14px; }
+  button {
+    margin-top: 14px; padding: 8px 16px; border-radius: 8px;
+    border: 1px solid #262C38; background: transparent; color: #E7EAF0;
+    cursor: pointer; font-family: inherit;
+  }
+</style>
+</head>
+<body>
+  <div class="box">
+    <h2>شناسه این دستگاه</h2>
+    <p>این کد را برای بلاک یا آزاد کردن این دستگاه در پنل مدیریت استفاده کن.</p>
+    <div class="id" id="idBox">در حال ساخت...</div>
+    <button onclick="copyId()">کپی کن</button>
+  </div>
+  <script>
+    const STORAGE_KEY = "app_device_id";
+    function getOrCreateDeviceId() {
+      let id = localStorage.getItem(STORAGE_KEY);
+      if (!id) {
+        id = crypto.randomUUID
+          ? crypto.randomUUID()
+          : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+              const r = (Math.random() * 16) | 0;
+              const v = c === "x" ? r : (r & 0x3) | 0x8;
+              return v.toString(16);
+            });
+        localStorage.setItem(STORAGE_KEY, id);
+      }
+      return id;
+    }
+    document.getElementById('idBox').textContent = getOrCreateDeviceId();
+    function copyId() {
+      navigator.clipboard.writeText(document.getElementById('idBox').textContent);
+    }
+  </script>
+</body>
+</html>
